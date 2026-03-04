@@ -2,212 +2,290 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة مديونيات - أحمد الشيخ للأحذية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="احمد الشيخ (3).png">
+    <meta name="theme-color" id="theme-color-meta" content="#488225">
+    
+    <title>أحمد الشيخ - إدارة المديونيات</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* --- متغيرات الألوان (الوضع النهاري الاحترافي النظيف) --- */
         :root {
-            --primary-green: #488225;
-            --light-green: #68ab3d;
-            --dark-gray: #4a4a4a;
-            --light-gray: #f4f4f9;
-            --white: #ffffff;
+            --primary: #488225;
+            --primary-hover: #3d6e1f;
+            --bg-main: #ffffff;
+            --bg-sidebar: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #95a5a6;
+            --border-light: #eaeded;
             --danger: #e74c3c;
-            --shadow: 0 10px 25px rgba(0,0,0,0.08);
-            --transition: all 0.3s ease;
+            --success-bg: #e8f8f5;
+            --transition: 0.2s ease;
+        }
+
+        /* --- متغيرات الألوان (الوضع الليلي الفخم) --- */
+        body.dark-mode {
+            --primary: #5da630;
+            --primary-hover: #68ab3d;
+            --bg-main: #121212;
+            --bg-sidebar: #181818;
+            --bg-card: #1e1e1e;
+            --text-main: #ecf0f1;
+            --text-muted: #7f8c8d;
+            --border-light: #2c2c2c;
+            --danger: #ff5252;
+            --success-bg: #142b22;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
 
-        body { background-color: var(--light-gray); color: var(--dark-gray); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        /* تخصيص الـ Scrollbar ليكون احترافياً */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 10px; }
+        body.dark-mode ::-webkit-scrollbar-thumb { background: #4a4a4a; }
 
-        /* Loader & Toasts */
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 24px; color: var(--primary-green); font-weight: bold; }
-        #toast { visibility: hidden; min-width: 250px; background-color: var(--primary-green); color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 10000; bottom: 30px; left: 50%; transform: translateX(-50%); font-size: 16px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
-        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-        #toast.error { background-color: var(--danger); }
+        body { 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            height: 100vh; 
+            overflow: hidden; /* يمنع التمرير الخارجي ليكون كبرنامج أصلي */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            transition: var(--transition); 
+        }
+
+        /* الإشعارات */
+        #loader { position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 20px; color: var(--primary); font-weight: bold; }
+        #toast { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-main); padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        #toast.show { bottom: 30px; opacity: 1; }
 
         /* شاشة تسجيل الدخول */
-        #login-screen { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: var(--shadow); text-align: center; width: 100%; max-width: 400px; display: none; }
-        .logo-container img { width: 160px; margin-bottom: 20px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-        .input-group { margin-bottom: 20px; text-align: right; }
-        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark-gray); }
-        .input-group input { width: 100%; padding: 12px 15px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; transition: var(--transition); }
-        .input-group input:focus { border-color: var(--primary-green); outline: none; }
-        button.btn-primary { width: 100%; padding: 14px; background-color: var(--primary-green); color: var(--white); border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: var(--transition); }
-        button.btn-primary:hover { background-color: var(--light-green); transform: translateY(-2px); }
+        #login-screen { 
+            background: var(--bg-card); padding: 40px; width: 100%; max-width: 380px; 
+            border: 1px solid var(--border-light); border-radius: 16px; text-align: center; display: none; 
+        }
+        .logo-login { width: 140px; margin-bottom: 30px; }
+        .input-clean { 
+            width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid var(--border-light); 
+            border-radius: 8px; background: var(--bg-main); color: var(--text-main); 
+            font-size: 15px; outline: none; transition: var(--transition); 
+        }
+        .input-clean:focus { border-color: var(--primary); }
+        .btn-clean { 
+            width: 100%; padding: 14px; background: var(--primary); color: #fff; 
+            border: none; border-radius: 8px; font-size: 16px; font-weight: bold; 
+            cursor: pointer; transition: var(--transition); 
+        }
+        .btn-clean:hover { background: var(--primary-hover); }
 
-        /* شاشة التطبيق */
-        #app-screen { display: none; width: 100%; max-width: 1300px; background: var(--white); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; margin: 20px; height: 95vh; flex-direction: column; }
-        header { background-color: var(--primary-green); color: var(--white); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        header .brand { display: flex; align-items: center; gap: 15px; }
-        header img { width: 50px; background: white; border-radius: 50%; padding: 5px; }
-        .logout-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: var(--transition); }
-        .logout-btn:hover { background: rgba(255,255,255,0.3); }
+        /* شاشة التطبيق الرئيسية (ملء الشاشة) */
+        #app-screen { 
+            display: none; width: 100vw; height: 100vh; flex-direction: column; 
+        }
 
-        .app-body { display: flex; flex: 1; overflow: hidden; }
-
-        /* الشريط الجانبي (العملاء) */
-        .sidebar { width: 340px; background: #fafafa; border-left: 1px solid #eee; display: flex; flex-direction: column; }
-        .search-box { padding: 15px; border-bottom: 1px solid #eee; background: white; }
-        .search-box input { width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
-        .search-box input:focus { border-color: var(--primary-green); }
-        .add-customer-box { padding: 15px; background: white; border-bottom: 1px solid #eee; display: flex; gap: 10px; }
-        .add-customer-box input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        .add-customer-box button { padding: 10px 15px; background: var(--dark-gray); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .customers-list { flex: 1; overflow-y: auto; padding: 15px; }
-        .customer-card { background: white; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: var(--transition); display: flex; justify-content: space-between; align-items: center; }
-        .customer-card:hover { border-color: var(--light-green); }
-        .customer-card.active { border-color: var(--primary-green); background: #f0f7ec; box-shadow: 0 4px 10px rgba(72,130,37,0.1); }
-        .customer-card .name { font-weight: bold; font-size: 16px; }
-        .customer-card .debt { color: var(--danger); font-weight: bold; font-size: 15px; direction: ltr; }
-
-        /* منطقة تفاصيل المديونية */
-        .main-content { flex: 1; display: flex; flex-direction: column; padding: 20px; background: white; }
-        .empty-state { flex: 1; display: flex; justify-content: center; align-items: center; color: #aaa; font-size: 20px; }
-        .debt-workspace { display: none; flex-direction: column; height: 100%; }
+        /* الهيدر الاحترافي */
+        header { 
+            background: var(--primary); color: white; height: 65px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 20px; flex-shrink: 0; 
+        }
+        body.dark-mode header { background: #1a1a1a; border-bottom: 1px solid var(--border-light); }
+        .brand-logo { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 800; }
+        .brand-logo img { height: 40px; background: white; border-radius: 50%; padding: 2px; }
         
-        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #eee; }
-        .workspace-header h2 { color: var(--primary-green); }
-        .header-actions { display: flex; gap: 10px; }
-        .btn-action { padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; display: flex; align-items: center; gap: 5px; }
-        .btn-whatsapp { background: #25D366; } .btn-whatsapp:hover { background: #1ebd5c; }
-        .btn-print { background: #34495e; } .btn-print:hover { background: #2c3e50; }
-        .btn-delete { background: var(--danger); } .btn-delete:hover { background: #c0392b; }
+        .header-actions button { 
+            background: transparent; color: white; border: none; padding: 8px; 
+            font-size: 18px; cursor: pointer; border-radius: 50%; transition: var(--transition); 
+        }
+        .header-actions button:hover { background: rgba(255,255,255,0.1); }
 
-        .forms-container { display: flex; gap: 15px; margin-bottom: 20px; }
-        .add-item-form { flex: 2; display: flex; gap: 10px; background: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; }
-        .add-payment-form { flex: 1; display: flex; gap: 10px; background: #e8f5e9; padding: 15px; border-radius: 12px; border: 1px solid #c8e6c9; }
-        .add-item-form input, .add-payment-form input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        .add-item-form button { padding: 10px 20px; background: var(--primary-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .add-payment-form button { padding: 10px 20px; background: #2e7d32; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* جسم البرنامج */
+        .app-body { display: flex; height: calc(100vh - 65px); width: 100%; }
 
-        .table-container { flex: 1; overflow-y: auto; margin-bottom: 20px; border: 1px solid #eee; border-radius: 12px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f4f4f9; padding: 15px; text-align: right; color: var(--dark-gray); position: sticky; top: 0; z-index: 10; font-weight: 800; border-bottom: 2px solid #ddd; }
-        td { padding: 12px 15px; border-bottom: 1px solid #eee; text-align: right; }
-        .item-row { transition: background 0.2s; } .item-row:hover { background: #fafafa; }
-        .payment-row { background-color: #f1f8e9; } .payment-row:hover { background-color: #e8f5e9; }
-        .item-total { font-weight: bold; color: var(--danger); }
-        .payment-total { font-weight: bold; color: var(--primary-green); }
-        .delete-btn { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 18px; }
+        /* الشريط الجانبي */
+        .sidebar { 
+            width: 300px; background: var(--bg-sidebar); border-left: 1px solid var(--border-light); 
+            display: flex; flex-direction: column; flex-shrink: 0; 
+        }
+        .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border-light); }
+        .customers-list { flex: 1; overflow-y: auto; padding: 10px; }
         
-        .grand-total-box { background: var(--primary-green); color: white; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 24px; font-weight: bold; box-shadow: 0 5px 15px rgba(72,130,37,0.3); }
+        .customer-card { 
+            padding: 15px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; 
+            transition: var(--transition); border: 1px solid transparent; 
+        }
+        .customer-card:hover { background: var(--bg-main); border-color: var(--border-light); }
+        .customer-card.active { background: rgba(72, 130, 37, 0.08); border-color: var(--primary); }
+        .customer-card .name { font-weight: bold; color: var(--text-main); }
+        .customer-card .debt { font-weight: bold; font-size: 14px; }
 
-        /* إعدادات الطباعة */
+        /* مساحة العمل */
+        .main-content { 
+            flex: 1; background: var(--bg-main); position: relative; 
+            display: flex; flex-direction: column; overflow: hidden; 
+        }
+        
+        /* العلامة المائية في الخلفية */
+        .watermark { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 300px; opacity: 0.03; pointer-events: none; 
+        }
+        body.dark-mode .watermark { filter: invert(1); opacity: 0.02; }
+
+        .empty-state { flex: 1; display: flex; justify-content: center; align-items: center; color: var(--text-muted); font-size: 18px; z-index: 1; }
+        
+        .debt-workspace { display: none; flex-direction: column; height: 100%; z-index: 1; padding: 20px; }
+        
+        .toolbar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-light); 
+        }
+        .toolbar h2 { color: var(--text-main); font-size: 20px; font-weight: 800; }
+        .toolbar-btns { display: flex; gap: 8px; }
+        .btn-icon { 
+            padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 6px; 
+            background: var(--bg-card); color: var(--text-main); cursor: pointer; 
+            font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px; transition: var(--transition); 
+        }
+        .btn-icon:hover { background: var(--border-light); }
+        .btn-icon.danger { color: var(--danger); border-color: rgba(231, 76, 60, 0.3); }
+
+        .forms-area { display: flex; gap: 15px; margin-bottom: 20px; }
+        .input-row { display: flex; gap: 10px; width: 100%; }
+        .quick-form { background: var(--bg-sidebar); padding: 15px; border-radius: 10px; border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 10px; }
+        .quick-form.debt-form { flex: 2; }
+        .quick-form.pay-form { flex: 1; background: var(--success-bg); border-color: rgba(72, 130, 37, 0.2); }
+        
+        /* الجدول الاحترافي المسطح */
+        .table-wrapper { flex: 1; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 10px; background: var(--bg-card); }
+        table { width: 100%; border-collapse: collapse; text-align: right; }
+        th { background: var(--bg-sidebar); padding: 12px 15px; font-size: 13px; color: var(--text-muted); position: sticky; top: 0; z-index: 2; font-weight: bold; border-bottom: 1px solid var(--border-light); }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border-light); font-size: 14px; font-weight: 500; }
+        tr:last-child td { border-bottom: none; }
+        .row-pay { background: rgba(72, 130, 37, 0.04); }
+        .delete-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; transition: var(--transition); }
+        .delete-btn:hover { color: var(--danger); }
+
+        /* شريط الإجمالي السفلي */
+        .summary-bar { 
+            background: var(--bg-sidebar); border: 1px solid var(--border-light); 
+            padding: 15px 20px; border-radius: 10px; margin-top: 15px; 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        .summary-title { font-size: 16px; font-weight: bold; color: var(--text-main); }
+        .summary-amount { font-size: 22px; font-weight: 800; }
+
+        /* الطباعة النظيفة */
         @media print {
-            body { background: white; }
-            #login-screen, header, .sidebar, .forms-container, .header-actions, .delete-btn { display: none !important; }
-            #app-screen { box-shadow: none; margin: 0; width: 100%; height: auto; display: block; }
-            .main-content { padding: 0; }
-            .table-container { border: none; overflow: visible; }
-            .grand-total-box { box-shadow: none; border: 2px solid var(--primary-green); color: var(--primary-green); background: white; }
-            th { background: #eee !important; color: black; }
+            body { background: white !important; color: black !important; display: block; height: auto; }
+            header, .sidebar, .forms-area, .toolbar-btns, .delete-btn { display: none !important; }
+            .main-content { padding: 0; background: white !important; display: block; }
+            .watermark { opacity: 0.1 !important; filter: none !important; }
+            .table-wrapper { border: none; overflow: visible; }
+            th { border-bottom: 2px solid black; color: black !important; }
+            td { border-bottom: 1px solid #ccc; color: black !important; }
+            .summary-bar { border: 2px solid black; background: white; margin-top: 20px; }
         }
     </style>
 </head>
-<body>
+<body class="light-mode">
 
-    <div id="loader">جاري التحميل...</div>
+    <div id="loader">أحمد الشيخ ...</div>
     <div id="toast">رسالة النظام</div>
 
     <div id="login-screen">
-        <div class="logo-container">
-            <img src="17074.png" alt="أحمد الشيخ للاحذية">
-        </div>
-        <h2 style="color: var(--primary-green); margin-bottom: 20px;">تسجيل الدخول</h2>
+        <img src="احمد الشيخ (3).png" alt="Logo" class="logo-login">
         <form id="loginForm">
-            <div class="input-group">
-                <label>البريد الإلكتروني</label>
-                <input type="email" id="email" required placeholder="admin@elshekh.com">
-            </div>
-            <div class="input-group">
-                <label>كلمة المرور</label>
-                <input type="password" id="password" required placeholder="••••••••">
-            </div>
-            <button type="submit" class="btn-primary">دخول للنظام</button>
-            <p id="login-error" style="color: var(--danger); margin-top: 15px; display: none; font-weight: bold;"></p>
+            <input type="email" id="email" class="input-clean" required placeholder="البريد الإلكتروني">
+            <input type="password" id="password" class="input-clean" required placeholder="كلمة المرور">
+            <button type="submit" class="btn-clean">تسجيل الدخول</button>
+            <p id="login-error" style="color: var(--danger); margin-top: 15px; display: none; font-size: 14px;"></p>
         </form>
     </div>
 
     <div id="app-screen">
         <header>
-            <div class="brand">
-                <img src="17074.png" alt="Logo">
-                <h2>أحمد الشيخ - إدارة المديونيات</h2>
+            <div class="brand-logo">
+                <img src="احمد الشيخ (3).png" alt="Logo">
+                <span>أحمد الشيخ</span>
             </div>
-            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
+            <div class="header-actions">
+                <button id="themeToggle" title="الوضع الليلي"><i class="fas fa-moon"></i></button>
+                <button id="logoutBtn" title="خروج"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
         </header>
         
         <div class="app-body">
             <div class="sidebar">
-                <div class="search-box">
-                    <input type="text" id="searchInput" onkeyup="filterCustomers()" placeholder="🔍 ابحث عن اسم العميل...">
-                </div>
-                <div class="add-customer-box">
-                    <form id="addCustomerForm" style="display: flex; width: 100%; gap: 10px;">
-                        <input type="text" id="newCustomerName" placeholder="اسم العميل الجديد" required>
-                        <button type="submit" title="إضافة عميل"><i class="fas fa-plus"></i></button>
+                <div class="sidebar-header">
+                    <input type="text" id="searchInput" class="input-clean" onkeyup="filterCustomers()" placeholder="بحث عن عميل..." style="margin-bottom:10px;">
+                    <form id="addCustomerForm" style="display:flex; gap:5px;">
+                        <input type="text" id="newCustomerName" class="input-clean" placeholder="اسم جديد..." required style="margin:0;">
+                        <button type="submit" class="btn-clean" style="width:45px; padding:0;"><i class="fas fa-plus"></i></button>
                     </form>
                 </div>
-                <div class="customers-list" id="customersList">
-                    </div>
+                <div class="customers-list" id="customersList"></div>
             </div>
 
             <div class="main-content">
+                <img src="احمد الشيخ (3).png" class="watermark" alt="watermark">
+                
                 <div class="empty-state" id="emptyState">
-                    <div style="text-align: center;">
-                        <img src="17074.png" style="width: 150px; opacity: 0.2; margin-bottom: 20px;">
-                        <p>اختر عميلاً من القائمة الجانبية لعرض أو تعديل الحساب</p>
-                    </div>
+                    حدد كشف حساب من القائمة الجانبية
                 </div>
 
                 <div class="debt-workspace" id="debtWorkspace">
-                    <div class="workspace-header">
-                        <h2 id="currentCustomerName">اسم العميل</h2>
-                        <div class="header-actions">
-                            <button class="btn-action btn-whatsapp" onclick="shareWhatsApp()"><i class="fab fa-whatsapp"></i> إرسال واتساب</button>
-                            <button class="btn-action btn-print" onclick="window.print()"><i class="fas fa-print"></i> طباعة كشف</button>
-                            <button class="btn-action btn-delete" id="deleteCustomerBtn"><i class="fas fa-trash"></i> حذف الحساب</button>
+                    <div class="toolbar">
+                        <h2 id="currentCustomerName">الاسم</h2>
+                        <div class="toolbar-btns">
+                            <button class="btn-icon" onclick="shareWhatsApp()"><i class="fab fa-whatsapp"></i> واتساب</button>
+                            <button class="btn-icon" onclick="window.print()"><i class="fas fa-print"></i> طباعة</button>
+                            <button class="btn-icon danger" id="deleteCustomerBtn"><i class="fas fa-trash"></i> حذف</button>
                         </div>
                     </div>
 
-                    <div class="forms-container">
-                        <form class="add-item-form" id="addItemForm">
-                            <input type="text" id="itemName" placeholder="اسم الصنف (مثال: كوتشي)" required>
-                            <input type="number" id="itemQty" placeholder="العدد" min="1" required style="max-width: 80px;">
-                            <input type="number" id="itemPrice" placeholder="سعر القطعة" min="0" required style="max-width: 110px;">
-                            <button type="submit"><i class="fas fa-cart-plus"></i> إضافة للحساب</button>
+                    <div class="forms-area">
+                        <form class="quick-form debt-form" id="addItemForm">
+                            <div class="input-row">
+                                <input type="text" id="itemName" class="input-clean" placeholder="اسم الصنف" required style="margin:0;">
+                                <input type="number" id="itemQty" class="input-clean" placeholder="العدد" min="1" required style="margin:0; width: 80px;">
+                                <input type="number" id="itemPrice" class="input-clean" placeholder="السعر" min="0" required style="margin:0; width: 100px;">
+                                <button type="submit" class="btn-clean" style="width:auto; padding:0 20px;">تسجيل</button>
+                            </div>
                         </form>
 
-                        <form class="add-payment-form" id="addPaymentForm">
-                            <input type="number" id="paymentAmount" placeholder="مبلغ الدفعة" min="1" required>
-                            <input type="text" id="paymentNote" placeholder="ملاحظة (اختياري)">
-                            <button type="submit"><i class="fas fa-hand-holding-usd"></i> تسديد</button>
+                        <form class="quick-form pay-form" id="addPaymentForm">
+                            <div class="input-row">
+                                <input type="number" id="paymentAmount" class="input-clean" placeholder="المبلغ المسدد" min="1" required style="margin:0;">
+                                <button type="submit" class="btn-clean" style="width:auto; padding:0 20px; background: #2e7d32;">دفع</button>
+                            </div>
                         </form>
                     </div>
 
-                    <div class="table-container">
+                    <div class="table-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>التاريخ</th>
-                                    <th>البيان (الصنف/الدفعة)</th>
-                                    <th>العدد</th>
-                                    <th>السعر</th>
-                                    <th>الإجمالي</th>
-                                    <th>حذف</th>
+                                    <th style="width:12%">التاريخ</th>
+                                    <th style="width:43%">البيان</th>
+                                    <th style="width:10%">العدد</th>
+                                    <th style="width:15%">السعر</th>
+                                    <th style="width:15%">الإجمالي</th>
+                                    <th style="width:5%"></th>
                                 </tr>
                             </thead>
-                            <tbody id="debtsTableBody">
-                                </tbody>
+                            <tbody id="debtsTableBody"></tbody>
                         </table>
                     </div>
 
-                    <div class="grand-total-box" id="totalBoxElement">
-                        <span>الرصيد المتبقي (الإجمالي):</span>
-                        <span id="grandTotalAmount">0 ج.م</span>
+                    <div class="summary-bar">
+                        <span class="summary-title">الرصيد النهائي:</span>
+                        <span class="summary-amount" id="grandTotalAmount">0 ج.م</span>
                     </div>
                 </div>
             </div>
@@ -225,8 +303,7 @@
             projectId: "alshaikh-1c6c0",
             storageBucket: "alshaikh-1c6c0.firebasestorage.app",
             messagingSenderId: "389334396277",
-            appId: "1:389334396277:web:76f4149be590fc85d3373c",
-            measurementId: "G-DNXHNFVD9V"
+            appId: "1:389334396277:web:76f4149be590fc85d3373c"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -236,24 +313,54 @@
         const loader = document.getElementById('loader');
         const loginScreen = document.getElementById('login-screen');
         const appScreen = document.getElementById('app-screen');
+        const themeToggle = document.getElementById('themeToggle');
+        const metaThemeColor = document.getElementById('theme-color-meta');
+        const body = document.body;
         
         let currentCustomerId = null;
         let customersData = []; 
 
-        // -- دوال المساعدة (Toasts & Dates) --
-        window.showToast = function(msg, isError = false) {
+        // --- التحكم في السمة والتكامل مع المتصفح ---
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme === 'dark');
+        }
+
+        function toggleTheme() {
+            const isDark = body.classList.contains('light-mode');
+            applyTheme(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function applyTheme(isDark) {
+            const icon = themeToggle.querySelector('i');
+            if (isDark) {
+                body.classList.replace('light-mode', 'dark-mode');
+                icon.className = 'fas fa-sun';
+                // لون شريط المتصفح في الوضع الليلي
+                metaThemeColor.setAttribute("content", "#1a1a1a"); 
+            } else {
+                body.classList.replace('dark-mode', 'light-mode');
+                icon.className = 'fas fa-moon';
+                // لون شريط المتصفح في الوضع النهاري (أخضر ليتطابق مع الهيدر)
+                metaThemeColor.setAttribute("content", "#488225"); 
+            }
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        initTheme();
+
+        // --- التنبيهات والتاريخ ---
+        window.showToast = function(msg) {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
-            toast.className = isError ? "toast show error" : "toast show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        function getCurrentDate() {
-            const date = new Date();
-            return date.toLocaleDateString('ar-EG');
-        }
+        function getCurrentDate() { return new Date().toLocaleDateString('en-GB'); }
 
-        // -- نظام تسجيل الدخول --
+        // --- المصادقة ---
         onAuthStateChanged(auth, (user) => {
             loader.style.display = 'none';
             if (user) {
@@ -268,29 +375,25 @@
 
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, password).catch(() => {
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('login-error').innerText = "البيانات غير صحيحة!";
-            });
+            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
+                .catch(() => {
+                    const err = document.getElementById('login-error');
+                    err.style.display = 'block'; err.innerText = "بيانات الدخول غير صحيحة";
+                });
         });
 
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // -- إدارة العملاء (البحث والجلب) --
+        // --- إدارة البيانات ---
         window.filterCustomers = function() {
-            const filter = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.customer-card');
-            cards.forEach(card => {
-                const name = card.querySelector('.name').innerText.toLowerCase();
-                card.style.display = name.includes(filter) ? 'flex' : 'none';
+            const val = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.customer-card').forEach(c => {
+                c.style.display = c.querySelector('.name').innerText.toLowerCase().includes(val) ? 'flex' : 'none';
             });
         };
 
         function loadCustomers() {
-            const customersRef = collection(db, "customers");
-            onSnapshot(customersRef, (snapshot) => {
+            onSnapshot(collection(db, "customers"), (snapshot) => {
                 customersData = [];
                 const list = document.getElementById('customersList');
                 list.innerHTML = '';
@@ -300,37 +403,31 @@
                     data.id = doc.id;
                     if(!data.items) data.items = [];
                     
-                    // حساب الإجمالي (المديونية - الدفعات)
                     let totalDebt = 0;
-                    data.items.forEach(item => {
-                        if(item.type === 'payment') totalDebt -= item.price;
-                        else totalDebt += (item.qty * item.price);
-                    });
+                    data.items.forEach(item => totalDebt += (item.type === 'payment' ? -item.price : item.qty * item.price));
                     data.totalDebt = totalDebt;
                     customersData.push(data);
 
                     const div = document.createElement('div');
                     div.className = `customer-card ${currentCustomerId === doc.id ? 'active' : ''}`;
-                    div.innerHTML = `<span class="name">${data.name}</span><span class="debt" style="color: ${totalDebt <= 0 ? 'var(--primary-green)' : 'var(--danger)'}">${totalDebt} ج</span>`;
+                    const color = totalDebt > 0 ? 'var(--danger)' : 'var(--primary)';
+                    div.innerHTML = `<span class="name">${data.name}</span><span class="debt" style="color:${color}">${totalDebt}</span>`;
                     div.onclick = () => selectCustomer(doc.id, div);
                     list.appendChild(div);
                 });
-
                 if (currentCustomerId) renderCustomerWorkspace(currentCustomerId);
             });
         }
 
         document.getElementById('addCustomerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const nameInput = document.getElementById('newCustomerName');
-            const name = nameInput.value.trim();
+            const name = document.getElementById('newCustomerName').value.trim();
             if(!name) return;
-            await addDoc(collection(db, "customers"), { name: name, items: [], createdAt: serverTimestamp() });
-            nameInput.value = '';
-            showToast("تمت إضافة العميل بنجاح ✔️");
+            await addDoc(collection(db, "customers"), { name, items: [], createdAt: serverTimestamp() });
+            document.getElementById('newCustomerName').value = '';
+            showToast("تم إضافة العميل بنجاح");
         });
 
-        // -- مساحة العمل وعرض البيانات --
         window.selectCustomer = function(id, element = null) {
             currentCustomerId = id;
             document.getElementById('emptyState').style.display = 'none';
@@ -345,119 +442,82 @@
         function renderCustomerWorkspace(id) {
             const customer = customersData.find(c => c.id === id);
             if(!customer) return;
-
-            document.getElementById('currentCustomerName').innerText = `كشف حساب: ${customer.name}`;
+            document.getElementById('currentCustomerName').innerText = customer.name;
             const tbody = document.getElementById('debtsTableBody');
             tbody.innerHTML = '';
             
             customer.items.forEach((item, index) => {
                 if(item.type === 'payment') {
-                    // رسم سطر الدفعة
-                    tbody.innerHTML += `
-                        <tr class="payment-row">
-                            <td>${item.date}</td>
-                            <td colspan="3" style="color: var(--primary-green); font-weight:bold;"><i class="fas fa-arrow-down"></i> دفعة مسددة: ${item.name || ''}</td>
-                            <td class="payment-total">- ${item.price} ج.م</td>
-                            <td><button class="delete-btn" onclick="deleteItem(${index})"><i class="fas fa-times"></i></button></td>
-                        </tr>
-                    `;
+                    tbody.innerHTML += `<tr class="row-pay">
+                        <td>${item.date}</td>
+                        <td colspan="3" style="color:var(--primary);font-weight:bold;">دفعة نقدية مسددة</td>
+                        <td style="color:var(--primary);font-weight:bold;">- ${item.price}</td>
+                        <td><button class="delete-btn" onclick="deleteItem(${index})"><i class="fas fa-times"></i></button></td>
+                    </tr>`;
                 } else {
-                    // رسم سطر المديونية
-                    const total = item.qty * item.price;
-                    tbody.innerHTML += `
-                        <tr class="item-row">
-                            <td>${item.date}</td>
-                            <td>${item.name}</td>
-                            <td>${item.qty}</td>
-                            <td>${item.price} ج.م</td>
-                            <td class="item-total">${total} ج.م</td>
-                            <td><button class="delete-btn" onclick="deleteItem(${index})"><i class="fas fa-trash-alt"></i></button></td>
-                        </tr>
-                    `;
+                    tbody.innerHTML += `<tr>
+                        <td>${item.date}</td>
+                        <td>${item.name}</td>
+                        <td>${item.qty}</td>
+                        <td>${item.price}</td>
+                        <td style="color:var(--danger);font-weight:bold;">${item.qty * item.price}</td>
+                        <td><button class="delete-btn" onclick="deleteItem(${index})"><i class="fas fa-trash"></i></button></td>
+                    </tr>`;
                 }
             });
 
-            const grandTotalEl = document.getElementById('grandTotalAmount');
-            grandTotalEl.innerText = customer.totalDebt + " ج.م";
-            document.getElementById('totalBoxElement').style.backgroundColor = customer.totalDebt <= 0 ? 'var(--light-green)' : 'var(--primary-green)';
+            document.getElementById('grandTotalAmount').innerText = customer.totalDebt + " ج.م";
+            document.getElementById('grandTotalAmount').style.color = customer.totalDebt > 0 ? 'var(--danger)' : 'var(--primary)';
         }
 
-        // -- إضافة صنف جديد (دين) --
         document.getElementById('addItemForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if(!currentCustomerId) return;
-            const name = document.getElementById('itemName').value;
-            const qty = parseFloat(document.getElementById('itemQty').value);
-            const price = parseFloat(document.getElementById('itemPrice').value);
-            const date = getCurrentDate();
-
             const customer = customersData.find(c => c.id === currentCustomerId);
-            const updatedItems = [...customer.items, { type: 'debt', date, name, qty, price }];
-            
-            await updateDoc(doc(db, "customers", currentCustomerId), { items: updatedItems });
-            e.target.reset();
-            showToast("تم إضافة الصنف للحساب ✔️");
+            const newItem = {
+                type: 'debt', date: getCurrentDate(),
+                name: document.getElementById('itemName').value,
+                qty: parseFloat(document.getElementById('itemQty').value),
+                price: parseFloat(document.getElementById('itemPrice').value)
+            };
+            await updateDoc(doc(db, "customers", currentCustomerId), { items: [...customer.items, newItem] });
+            e.target.reset(); document.getElementById('itemName').focus();
         });
 
-        // -- تسديد دفعة (قبض) --
         document.getElementById('addPaymentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if(!currentCustomerId) return;
-            const amount = parseFloat(document.getElementById('paymentAmount').value);
-            const note = document.getElementById('paymentNote').value;
-            const date = getCurrentDate();
-
             const customer = customersData.find(c => c.id === currentCustomerId);
-            const updatedItems = [...customer.items, { type: 'payment', date, name: note, qty: 1, price: amount }];
-            
-            await updateDoc(doc(db, "customers", currentCustomerId), { items: updatedItems });
+            const newItem = {
+                type: 'payment', date: getCurrentDate(),
+                name: 'دفعة', qty: 1, price: parseFloat(document.getElementById('paymentAmount').value)
+            };
+            await updateDoc(doc(db, "customers", currentCustomerId), { items: [...customer.items, newItem] });
             e.target.reset();
-            showToast("تم خصم الدفعة بنجاح ✔️");
         });
 
-        // -- حذف حركة --
         window.deleteItem = async function(index) {
-            if(!currentCustomerId || !confirm('هل أنت متأكد من حذف هذه الحركة؟')) return;
+            if(!confirm('هل أنت متأكد من الحذف؟')) return;
             const customer = customersData.find(c => c.id === currentCustomerId);
-            const updatedItems = [...customer.items];
-            updatedItems.splice(index, 1);
-            await updateDoc(doc(db, "customers", currentCustomerId), { items: updatedItems });
-            showToast("تم الحذف بنجاح 🗑️");
+            const items = [...customer.items]; items.splice(index, 1);
+            await updateDoc(doc(db, "customers", currentCustomerId), { items });
         };
 
-        // -- حذف عميل --
         document.getElementById('deleteCustomerBtn').addEventListener('click', async () => {
-            if(!currentCustomerId || !confirm('تنبيه هام! هل أنت متأكد من حذف كشف حساب العميل بالكامل؟ لا يمكن التراجع!')) return;
+            if(!confirm('هل أنت متأكد من حذف الحساب بالكامل؟')) return;
             await deleteDoc(doc(db, "customers", currentCustomerId));
             currentCustomerId = null;
             document.getElementById('emptyState').style.display = 'flex';
             document.getElementById('debtWorkspace').style.display = 'none';
-            showToast("تم حذف حساب العميل 🗑️", true);
         });
 
-        // -- مشاركة واتساب --
         window.shareWhatsApp = function() {
             if(!currentCustomerId) return;
             const customer = customersData.find(c => c.id === currentCustomerId);
-            let msg = `*كشف حساب - أحمد الشيخ للأحذية*\n`;
-            msg += `العميل: ${customer.name}\n`;
-            msg += `التاريخ: ${getCurrentDate()}\n`;
-            msg += `-------------------\n`;
-            
-            customer.items.forEach(item => {
-                if(item.type === 'payment') {
-                    msg += `🟢 دفع: ${item.price} ج (${item.date})\n`;
-                } else {
-                    msg += `🔴 ${item.name} | العدد: ${item.qty} | الإجمالي: ${item.qty * item.price} ج\n`;
-                }
-            });
-            
-            msg += `-------------------\n`;
-            msg += `*الرصيد المتبقي المطلوب: ${customer.totalDebt} ج.م*\n`;
-            msg += `شكراً لتعاملكم معنا 🙏`;
-            
-            const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
+            let msg = `*كشف حساب - أحمد الشيخ للأحذية*\nالعميل: ${customer.name}\n`;
+            customer.items.forEach(i => msg += i.type === 'payment' ? `🟢 سداد: ${i.price}ج (${i.date})\n` : `🔴 سحب: ${i.name} (${i.qty*i.price}ج)\n`);
+            msg += `*الرصيد المطلوب: ${customer.totalDebt} ج.م*`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         };
     </script>
 </body>
