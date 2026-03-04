@@ -3,166 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" id="theme-color-meta" content="#488225">
-    <link rel="icon" type="image/png" href="احمد الشيخ (3).png">
+    <meta name="theme-color" content="#3E4F1A">
+    <link rel="icon" type="image/png" href="17074.png">
     <title>أحمد الشيخ - نظام المديونيات</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* --- المتغيرات - الوضع النهاري --- */
+        /* --- لوحة الألوان الجديدة (زيتي وأبيض) --- */
         :root {
-            --primary: #488225;
-            --primary-hover: #3d6e1f;
-            --bg-main: #f4f6f8;
-            --bg-card: #ffffff;
-            --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
+            --primary-zayti: #3E4F1A; /* اللون الزيتي الأساسي */
+            --primary-zayti-hover: #2e3b13;
+            --bg-board: #ffffff;      /* لون اللوحة أبيض */
+            --bg-page: #f9faf9;       /* خلفية خفيفة جداً للصفحة */
+            --text-main-zayti: #3E4F1A;
+            --text-muted: #708050;    /* زيتي باهت للنصوص الثانوية */
             --border-light: #e0e6ed;
-            --danger: #e74c3c;
-            --danger-light: #fdedec;
-            --success: #27ae60;
-            --success-light: #e9f7ef;
+            --black-simple: #333333;   /* أسود بسيط للأيقونات */
             --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* --- المتغيرات - الوضع الليلي --- */
-        body.dark-mode {
-            --primary: #5da630;
-            --bg-main: #121212;
-            --bg-card: #1e1e1e;
-            --text-main: #ecf0f1;
-            --text-muted: #95a5a6;
-            --border-light: #2c3e50;
-            --danger: #ff5252;
-            --danger-light: rgba(255, 82, 82, 0.1);
-            --success: #2ecc71;
-            --success-light: rgba(46, 204, 113, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        body { background-color: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; position: relative; }
-
-        /* العلامة المائية الثابتة في الخلفية */
-        .app-watermark {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 85vw; max-width: 400px; opacity: 0.04; pointer-events: none; z-index: 0;
+        /* قفل الشاشة لمنع خروج أي عناصر أو سحب الصفحة نفسها */
+        html, body { 
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100dvh;
+            overflow: hidden; 
+            background-color: var(--bg-page); color: var(--text-main-zayti); 
         }
-        body.dark-mode .app-watermark { filter: invert(1); opacity: 0.03; }
+
+        /* العلامة المائية في الخلفية */
+        .app-watermark {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80vw; max-width: 350px; opacity: 0.04; pointer-events: none; z-index: 0;
+        }
 
         /* العناصر العامة */
         .btn, .input-clean { border-radius: 12px; outline: none; border: none; transition: var(--transition); }
-        .input-clean { background: var(--bg-card); border: 1.5px solid var(--border-light); color: var(--text-main); padding: 14px; font-size: 15px; width: 100%; }
-        .input-clean:focus { border-color: var(--primary); }
-        .btn-primary { background: var(--primary); color: white; padding: 14px; font-size: 16px; font-weight: bold; width: 100%; cursor: pointer; }
-        .btn-primary:active { transform: scale(0.98); }
+        .input-clean { background: var(--bg-board); border: 1.5px solid var(--border-light); color: var(--text-main-zayti); padding: 14px; font-size: 15px; width: 100%; }
+        .input-clean:focus { border-color: var(--primary-zayti); }
+        .btn-primary { background: var(--primary-zayti); color: white; padding: 14px; font-size: 16px; font-weight: bold; width: 100%; cursor: pointer; }
+        .btn-primary:active { transform: scale(0.98); background: var(--primary-zayti-hover); }
 
         /* الإشعارات */
-        #loader { position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 20px; color: var(--primary); font-weight: bold; }
-        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-main); padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; opacity: 0; transition: var(--transition); z-index: 10000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); white-space: nowrap; }
+        #loader { position: fixed; inset: 0; background: var(--bg-board); z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 20px; color: var(--primary-zayti); font-weight: bold; }
+        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--text-main-zayti); color: var(--bg-board); padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; opacity: 0; transition: var(--transition); z-index: 10000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         #toast.show { bottom: 30px; opacity: 1; }
 
         /* شاشة تسجيل الدخول */
-        #login-screen { position: absolute; inset: 0; background: var(--bg-main); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; display: none; }
-        .login-box { background: var(--bg-card); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border-light); z-index: 1; }
-        .login-box img { width: 150px; margin-bottom: 25px; }
+        #login-screen { position: absolute; inset: 0; background: var(--bg-page); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; display: none; }
+        .login-box { background: var(--bg-board); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border-light); z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .login-box img { width: 140px; margin-bottom: 25px; }
 
         /* هيكل التطبيق (نظام الصفحات المنزلقة) */
-        #app-container { display: none; position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-        .screen { position: absolute; top: 0; right: 0; width: 100%; height: 100%; background: transparent; display: flex; flex-direction: column; transition: transform 0.35s ease-in-out; z-index: 1; }
+        #app-container { display: none; position: relative; width: 100%; height: 100%; overflow: hidden; }
+        .screen { position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; background: transparent; display: flex; flex-direction: column; transition: transform 0.35s ease-in-out; z-index: 1; }
 
-        /* الهيدر المشترك */
-        header { background: var(--primary); color: white; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; flex-shrink: 0; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        body.dark-mode header { background: #1a1a1a; border-bottom: 1px solid #333; }
+        /* الهيدر الزيتي الاحترافي */
+        header { background: var(--primary-zayti); color: white; height: 65px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; flex-shrink: 0; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .header-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; }
         .header-title img { height: 40px; background: white; border-radius: 50%; padding: 2px; }
-        .header-btns button { background: none; border: none; color: white; font-size: 20px; padding: 8px; cursor: pointer; }
+        
+        /* زراير الهيدر */
+        .header-btns { display: flex; gap: 10px; }
+        .btn-icon-top { background: rgba(255,255,255,0.1); border: none; color: white; width: 40px; height: 40px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; transition: 0.2s; }
+        .btn-icon-top:active { transform: scale(0.9); background: rgba(255,255,255,0.2); }
 
         /* ----------------------------------
-           الشاشة الأولى: قائمة العملاء
+           الشاشة 1: قائمة العملاء
            ---------------------------------- */
         #screen-customers { transform: translateX(0); }
-        .top-bar-actions { padding: 15px; background: var(--bg-card); border-bottom: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+        .top-bar-actions { padding: 15px; background: var(--bg-board); border-bottom: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 10px; z-index: 2; flex-shrink: 0; }
         .search-wrapper { position: relative; }
         .search-wrapper i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         .search-wrapper input { padding-right: 40px; border-radius: 30px; }
         .add-customer-form { display: flex; gap: 10px; }
-        .add-customer-form button { width: 60px; background: var(--text-main); color: var(--bg-card); border-radius: 12px; font-size: 18px; }
+        /* زر الإضافة أسود بسيط */
+        .add-customer-form button { width: 60px; background: var(--black-simple); color: white; border-radius: 12px; font-size: 18px; }
+        .add-customer-form button:active { background: #000; }
         
-        .list-container { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 30px; z-index: 2; }
-        .customer-card { background: var(--bg-card); border: 1px solid var(--border-light); padding: 18px; border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .customer-card:active { transform: scale(0.98); background: var(--border-light); }
-        .cust-info .name { font-size: 16px; font-weight: 800; display: block; margin-bottom: 5px; }
+        /* حاوية القائمة بسلاسة موبايل */
+        .list-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 15px; padding-bottom: 40px; z-index: 2; }
+        
+        .customer-card { background: var(--bg-board); border: 1px solid var(--border-light); padding: 18px; border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .cust-info .name { font-size: 16px; font-weight: 800; display: block; margin-bottom: 5px; color: var(--text-main-zayti); }
         .cust-info .date { font-size: 12px; color: var(--text-muted); }
-        .cust-amount { font-size: 16px; font-weight: 800; direction: ltr; }
+        /* الرصيد زيتي دائماً */
+        .cust-amount { font-size: 16px; font-weight: 800; direction: ltr; color: var(--text-main-zayti); }
 
         /* ----------------------------------
-           الشاشة الثانية: تفاصيل المديونية (تنزلق من اليسار)
+           الشاشة 2: تفاصيل المديونية
            ---------------------------------- */
-        #screen-workspace { transform: translateX(-100%); background: var(--bg-main); z-index: 5; }
+        #screen-workspace { transform: translateX(-100%); background: var(--bg-page); z-index: 5; }
         #screen-workspace.active { transform: translateX(0); }
         
-        /* فورمات الإضافة داخل المديونية */
-        .workspace-forms { padding: 15px; display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); border-bottom: 1px solid var(--border-light); z-index: 2; }
+        .workspace-forms { padding: 15px; display: flex; flex-direction: column; gap: 10px; background: var(--bg-board); border-bottom: 1px solid var(--border-light); z-index: 2; flex-shrink: 0; }
         .w-form { display: flex; gap: 8px; }
         .w-form input { padding: 12px; border-radius: 10px; }
         .w-form button { width: 50px; border-radius: 10px; color: white; border: none; font-size: 18px; display: flex; justify-content: center; align-items: center; }
-        .btn-add-debt { background: var(--danger); }
-        .btn-add-pay { background: var(--success); }
+        /* الأزرار زيتي دائماً */
+        .btn-add-debt { background: var(--primary-zayti); }
+        .btn-add-debt:active { background: var(--primary-zayti-hover); }
+        .btn-add-pay { background: var(--text-muted); }
+        .btn-add-pay:active { background: var(--primary-zayti); }
 
-        /* تصميم الكروت للمديونيات (بديل الجدول) */
-        .debts-list { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; z-index: 2; }
+        .debts-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 15px; padding-bottom: 90px; z-index: 2; }
         
-        .item-card { background: var(--bg-card); border-radius: 14px; padding: 15px; margin-bottom: 12px; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
+        .item-card { background: var(--bg-board); border-radius: 14px; padding: 15px; margin-bottom: 12px; position: relative; overflow: hidden; border: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .item-card::before { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 6px; }
         
-        /* كارت الدين */
-        .item-card.is-debt::before { background: var(--danger); }
-        /* كارت الدفع */
-        .item-card.is-pay::before { background: var(--success); }
-        .item-card.is-pay { background: var(--success-light); border-color: transparent; }
+        /* كارت الدين (خط زيتي غامق) */
+        .item-card.is-debt::before { background: var(--primary-zayti); }
+        /* كارت الدفع (خط زيتي فاتح) */
+        .item-card.is-pay::before { background: var(--text-muted); }
 
-        .item-details { padding-right: 10px; }
-        .item-title { font-weight: 800; font-size: 15px; margin-bottom: 4px; display: block; color: var(--text-main); }
+        .item-title { font-weight: 800; font-size: 15px; display: block; color: var(--text-main-zayti); }
         .item-meta { font-size: 13px; color: var(--text-muted); }
-        
-        .item-totals { text-align: left; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-        .item-price { font-size: 16px; font-weight: 900; }
-        .is-debt .item-price { color: var(--danger); }
-        .is-pay .item-price { color: var(--success); }
-        .btn-delete { background: none; border: none; color: var(--text-muted); font-size: 16px; padding: 5px; opacity: 0.6; }
+        .item-totals { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+        /* السعر زيتي دائماً */
+        .item-price { font-size: 16px; font-weight: 900; color: var(--text-main-zayti); }
+        /* زر الحذف أسود بسيط باهت */
+        .btn-delete { background: none; border: none; color: var(--black-simple); opacity: 0.5; font-size: 18px; padding: 5px; }
+        .btn-delete:active { opacity: 1; color: var(--danger); }
 
-        /* شريط الإجمالي السفلي الثابت */
-        .fixed-bottom-bar { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--bg-card); border-top: 1px solid var(--border-light); padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 10; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        /* شريط الإجمالي الثابت بالأسفل */
+        .fixed-bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 70px; background: var(--bg-board); border-top: 1px solid var(--border-light); padding: 0 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; box-shadow: 0 -5px 15px rgba(0,0,0,0.03); }
         .total-text { font-size: 16px; font-weight: bold; color: var(--text-muted); }
-        .total-number { font-size: 24px; font-weight: 900; }
-
-        /* إعدادات الطباعة */
-        @media print {
-            body { background: white !important; }
-            #screen-customers, header, .workspace-forms, .btn-delete, .fixed-bottom-bar { display: none !important; }
-            #screen-workspace { transform: none !important; position: static !important; }
-            .item-card { border: 1px solid #ccc !important; break-inside: avoid; }
-            .app-watermark { opacity: 0.1 !important; filter: grayscale(100%); }
-        }
+        /* الرقم زيتي دائماً */
+        .total-number { font-size: 24px; font-weight: 900; color: var(--text-main-zayti); }
     </style>
 </head>
-<body class="light-mode">
+<body class="light-mode"> 
 
-    <img src="احمد الشيخ (3).png" class="app-watermark" alt="">
+    <img src="17074.png" class="app-watermark" alt="">
 
     <div id="loader">جاري التحميل...</div>
     <div id="toast">رسالة</div>
 
     <div id="login-screen">
         <div class="login-box">
-            <img src="احمد الشيخ (3).png" alt="أحمد الشيخ">
-            <h2 style="margin-bottom:20px; color:var(--primary); font-weight:900;">تسجيل الدخول</h2>
+            <img src="17074.png" alt="أحمد الشيخ">
+            <h2 style="margin-bottom:20px; color:var(--primary-zayti); font-weight:900;">تسجيل الدخول</h2>
             <form id="loginForm">
                 <input type="email" id="email" class="input-clean" style="margin-bottom:15px;" required placeholder="البريد الإلكتروني">
                 <input type="password" id="password" class="input-clean" style="margin-bottom:20px;" required placeholder="كلمة المرور">
-                <button type="submit" class="btn btn-primary">دخول للنظام</button>
-                <p id="login-error" style="color:var(--danger); margin-top:10px; display:none; font-size:14px;"></p>
+                <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+                <p id="login-error" style="color:var(--danger); margin-top:10px; display:none;"></p>
             </form>
         </div>
     </div>
@@ -172,12 +158,11 @@
         <div id="screen-customers" class="screen">
             <header>
                 <div class="header-title">
-                    <img src="احمد الشيخ (3).png" alt="Logo">
+                    <img src="17074.png" alt="Logo">
                     <span>قائمة العملاء</span>
                 </div>
                 <div class="header-btns">
-                    <button id="themeToggle"><i class="fas fa-moon"></i></button>
-                    <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+                    <button class="btn-icon-top" id="logoutBtn" title="خروج"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </header>
 
@@ -203,23 +188,21 @@
                     <span id="currentCustomerName" style="font-size: 16px;">اسم العميل</span>
                 </div>
                 <div class="header-btns">
-                    <button onclick="shareWhatsApp()"><i class="fab fa-whatsapp"></i></button>
-                    <button onclick="window.print()"><i class="fas fa-print"></i></button>
-                    <button onclick="deleteCustomer()" style="color:#ffcccc;"><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn-icon-top" onclick="shareWhatsApp()"><i class="fab fa-whatsapp"></i></button>
+                    <button class="btn-icon-top" onclick="deleteCustomer()" style="color:rgba(255,255,255,0.6);"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </header>
 
             <div class="workspace-forms">
                 <form id="addItemForm" class="w-form">
-                    <input type="text" id="itemName" class="input-clean" placeholder="الصنف" required style="flex:2;">
+                    <input type="text" id="itemName" class="input-clean" placeholder="صنف (مثال: كوتشي)" required style="flex:2;">
                     <input type="number" id="itemQty" class="input-clean" placeholder="عدد" min="1" required style="flex:1;">
                     <input type="number" id="itemPrice" class="input-clean" placeholder="سعر" min="0" required style="flex:1;">
-                    <button type="submit" class="btn btn-add-debt"><i class="fas fa-cart-plus"></i></button>
+                    <button type="submit" class="btn btn-add-debt" title="إضافة دين (سحب صنف)"><i class="fas fa-plus"></i></button>
                 </form>
-                
                 <form id="addPaymentForm" class="w-form">
-                    <input type="number" id="paymentAmount" class="input-clean" placeholder="تسديد مبلغ (نقدية)" min="1" required style="flex:1;">
-                    <button type="submit" class="btn btn-add-pay"><i class="fas fa-money-bill-wave"></i></button>
+                    <input type="number" id="paymentAmount" class="input-clean" placeholder="مبلغ الدفعة نقدية" min="1" required style="flex:1;">
+                    <button type="submit" class="btn btn-add-pay" title="تسديد نقدية"><i class="fas fa-money-bill-wave"></i></button>
                 </form>
             </div>
 
@@ -227,7 +210,7 @@
                 </div>
 
             <div class="fixed-bottom-bar">
-                <span class="total-text">الرصيد المتبقي:</span>
+                <span class="total-text">المطلوب سداده:</span>
                 <span class="total-number" id="grandTotalAmount">0</span>
             </div>
         </div>
@@ -252,17 +235,14 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // واجهة المستخدم
         const loader = document.getElementById('loader');
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
         const workspaceScreen = document.getElementById('screen-workspace');
-        const body = document.body;
         
         let currentCustomerId = null;
         let customersData = []; 
 
-        // -- التنبيهات والأوضاع --
         window.showToast = function(msg) {
             const t = document.getElementById('toast');
             t.innerText = msg; t.classList.add('show');
@@ -271,55 +251,32 @@
 
         function getCurrentDate() { return new Date().toLocaleDateString('en-GB'); }
 
-        const themeToggleBtn = document.getElementById('themeToggle');
-        themeToggleBtn.addEventListener('click', () => {
-            const isDark = body.classList.toggle('dark-mode');
-            body.classList.toggle('light-mode', !isDark);
-            themeToggleBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            document.getElementById('theme-color-meta').content = isDark ? "#1a1a1a" : "#488225";
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-        if(localStorage.getItem('theme') === 'dark') themeToggleBtn.click();
-
-        // -- الانتقال بين الشاشات --
+        // --- الانتقال ---
         window.openWorkspace = function(id) {
             currentCustomerId = id;
-            workspaceScreen.classList.add('active'); // انزلاق الشاشة للداخل
+            workspaceScreen.classList.add('active');
             renderWorkspace();
         }
         window.closeWorkspace = function() {
-            workspaceScreen.classList.remove('active'); // انزلاق الشاشة للخارج
+            workspaceScreen.classList.remove('active');
             currentCustomerId = null;
-            // تفريغ الحقول
-            document.getElementById('addItemForm').reset();
-            document.getElementById('addPaymentForm').reset();
         }
 
-        // -- المصادقة --
+        // --- المصادقة ---
         onAuthStateChanged(auth, (user) => {
             loader.style.display = 'none';
-            if (user) {
-                loginScreen.style.display = 'none';
-                appContainer.style.display = 'block';
-                loadCustomers();
-            } else {
-                loginScreen.style.display = 'flex';
-                appContainer.style.display = 'none';
-            }
+            if (user) { loginScreen.style.display = 'none'; appContainer.style.display = 'block'; loadCustomers(); }
+            else { loginScreen.style.display = 'flex'; appContainer.style.display = 'none'; }
         });
 
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
-                .catch(() => {
-                    const err = document.getElementById('login-error');
-                    err.style.display = 'block'; err.innerText = "البيانات غير صحيحة";
-                });
+                .catch(() => { document.getElementById('login-error').style.display = 'block'; document.getElementById('login-error').innerText = "البيانات غير صحيحة"; });
         });
-
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // -- إدارة العملاء --
+        // --- إدارة العملاء ---
         window.filterCustomers = function() {
             const v = document.getElementById('searchInput').value.toLowerCase();
             document.querySelectorAll('.customer-card').forEach(c => {
@@ -336,20 +293,18 @@
                 snapshot.forEach((doc) => {
                     const data = doc.data(); data.id = doc.id;
                     if(!data.items) data.items = [];
-                    
                     let total = 0;
                     data.items.forEach(i => total += (i.type === 'payment' ? -i.price : i.qty * i.price));
                     data.totalDebt = total;
                     customersData.push(data);
 
-                    const color = total > 0 ? 'var(--danger)' : 'var(--primary)';
                     list.innerHTML += `
                         <div class="customer-card" onclick="openWorkspace('${doc.id}')">
                             <div class="cust-info">
                                 <span class="name">${data.name}</span>
                                 <span class="date">${data.items.length} حركات مسجلة</span>
                             </div>
-                            <div class="cust-amount" style="color:${color}">${total} ج</div>
+                            <div class="cust-amount">${total} ج</div>
                         </div>
                     `;
                 });
@@ -362,26 +317,24 @@
             const name = document.getElementById('newCustomerName').value.trim();
             if(!name) return;
             await addDoc(collection(db, "customers"), { name, items: [], createdAt: serverTimestamp() });
-            document.getElementById('newCustomerName').value = '';
-            showToast("تم الإضافة");
+            document.getElementById('newCustomerName').value = ''; showToast("تم الإضافة");
         });
 
-        // -- بناء شاشة المديونية بالكروت --
+        // --- بناء شاشة المديونية بالكروت ---
         function renderWorkspace() {
             const customer = customersData.find(c => c.id === currentCustomerId);
             if(!customer) return;
             document.getElementById('currentCustomerName').innerText = customer.name;
-            
             const list = document.getElementById('debtsList');
             list.innerHTML = '';
             
             customer.items.forEach((item, index) => {
                 if(item.type === 'payment') {
-                    // كارت دفع (أخضر)
+                    // كارت دفع (خط زيتي فاتح)
                     list.innerHTML += `
                         <div class="item-card is-pay">
                             <div class="item-details">
-                                <span class="item-title"><i class="fas fa-arrow-down"></i> دفعة نقدية</span>
+                                <span class="item-title"><i class="fas fa-arrow-down"></i> دفعة نقدية مسددة</span>
                                 <span class="item-meta">${item.date}</span>
                             </div>
                             <div class="item-totals">
@@ -391,7 +344,7 @@
                         </div>
                     `;
                 } else {
-                    // كارت دين (أحمر)
+                    // كارت دين (خط زيتي غامق)
                     const total = item.qty * item.price;
                     list.innerHTML += `
                         <div class="item-card is-debt">
@@ -407,19 +360,17 @@
                     `;
                 }
             });
-
             const totalEl = document.getElementById('grandTotalAmount');
             totalEl.innerText = customer.totalDebt + " ج.م";
-            totalEl.style.color = customer.totalDebt > 0 ? 'var(--danger)' : 'var(--primary)';
         }
 
-        // -- العمليات داخل المديونية --
+        // --- العمليات داخل المديونية ---
         document.getElementById('addItemForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const c = customersData.find(c => c.id === currentCustomerId);
             const newItem = { type: 'debt', date: getCurrentDate(), name: document.getElementById('itemName').value, qty: parseFloat(document.getElementById('itemQty').value), price: parseFloat(document.getElementById('itemPrice').value) };
             await updateDoc(doc(db, "customers", currentCustomerId), { items: [...c.items, newItem] });
-            e.target.reset(); document.getElementById('itemName').focus(); showToast("سجلت ✔️");
+            e.target.reset(); document.getElementById('itemName').focus();
         });
 
         document.getElementById('addPaymentForm').addEventListener('submit', async (e) => {
@@ -427,7 +378,7 @@
             const c = customersData.find(c => c.id === currentCustomerId);
             const newItem = { type: 'payment', date: getCurrentDate(), name: 'دفعة', qty: 1, price: parseFloat(document.getElementById('paymentAmount').value) };
             await updateDoc(doc(db, "customers", currentCustomerId), { items: [...c.items, newItem] });
-            e.target.reset(); showToast("تم الدفع ✔️");
+            e.target.reset();
         });
 
         window.deleteItem = async function(index) {
