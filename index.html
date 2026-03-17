@@ -14,11 +14,12 @@
             /* الألوان الأساسية للوضع الفاتح */
             --primary-zayti: #3E4F1A; 
             --primary-zayti-hover: #2e3b13;
-            --bg-page: #e8ecef; /* خلفية الصفحة */
+            --bg-page: #e8ecef; 
             --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             
             /* تأثيرات الزجاج (الوضع الفاتح) */
             --glass-bg: rgba(255, 255, 255, 0.45);
+            --workspace-glass: rgba(255, 255, 255, 0.7); /* خلفية أعتم شوية لشاشة العميل */
             --glass-border: rgba(255, 255, 255, 0.6);
             --glass-shadow: 0 8px 32px 0 rgba(62, 79, 26, 0.1);
             
@@ -32,13 +33,14 @@
 
         /* --- الوضع الليلي (Dark Mode) --- */
         body.dark-mode {
-            --primary-zayti: #8ba84b; /* زيتي أفتح عشان يظهر على الأسود */
+            --primary-zayti: #8ba84b; 
             --primary-zayti-hover: #a1c25a;
             --bg-page: #121212;
             --bg-gradient: linear-gradient(135deg, #1f231b 0%, #0a0a0a 100%);
             
             /* تأثيرات الزجاج (الوضع الليلي) */
             --glass-bg: rgba(20, 25, 15, 0.55);
+            --workspace-glass: rgba(15, 18, 12, 0.85); /* خلفية أعتم شوية لليل */
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             
@@ -145,7 +147,6 @@
         
         .list-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 5px 15px 40px; z-index: 2; }
         
-        /* كارت العميل الزجاجي */
         .customer-card { 
             padding: 20px; border-radius: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; 
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
@@ -156,7 +157,14 @@
         .cust-amount { font-size: 18px; font-weight: 900; direction: ltr; color: var(--primary-zayti); text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
         /* --- شاشة 2: تفاصيل المديونية --- */
-        #screen-workspace { transform: translateX(-100%); z-index: 5; }
+        /* التعديل هنا: غلوشة قوية وخلفية تعزل الشاشة اللي تحتها */
+        #screen-workspace { 
+            transform: translateX(-100%); 
+            z-index: 5; 
+            background: var(--workspace-glass);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
         #screen-workspace.active { transform: translateX(0); }
         
         .workspace-forms { padding: 15px; display: flex; flex-direction: column; gap: 10px; background: transparent; z-index: 2; flex-shrink: 0; }
@@ -168,7 +176,6 @@
 
         .debts-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 5px 15px 100px; z-index: 2; }
         
-        /* كارت الدين الزجاجي */
         .item-card { 
             border-radius: 18px; padding: 18px; margin-bottom: 15px; position: relative; overflow: hidden; 
             display: flex; justify-content: space-between; align-items: center; 
@@ -249,7 +256,7 @@
             </div>
 
             <div class="list-container" id="customersList">
-                </div>
+            </div>
         </div>
 
         <div id="screen-workspace" class="screen">
@@ -278,7 +285,7 @@
             </div>
 
             <div class="debts-list" id="debtsList">
-                </div>
+            </div>
 
             <div class="fixed-bottom-bar">
                 <span class="total-text">إجمالي المديونية:</span>
@@ -314,7 +321,6 @@
         let currentCustomerId = null;
         let customersData = []; 
 
-        // --- تشغيل الوضع الليلي/النهاري ---
         const themeToggleBtn = document.getElementById('themeToggle');
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
