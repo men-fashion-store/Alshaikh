@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#3E4F1A">
+    <meta name="theme-color" content="#ffffff">
     <link rel="icon" type="image/png" href="17074.png">
     <title>أحمد الشيخ - نظام المديونيات</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -11,43 +11,40 @@
     <style>
         /* --- المتغيرات والتصميم الزجاجي --- */
         :root {
-            /* الألوان الأساسية للوضع الفاتح */
             --primary-zayti: #3E4F1A; 
             --primary-zayti-hover: #2e3b13;
-            --bg-page: #e8ecef; 
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            /* خلفية أبيض صريح */
+            --bg-page: #ffffff; 
             
-            /* تأثيرات الزجاج (الوضع الفاتح) */
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --workspace-glass: rgba(255, 255, 255, 0.7); /* خلفية أعتم شوية لشاشة العميل */
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-shadow: 0 8px 32px 0 rgba(62, 79, 26, 0.1);
+            --glass-bg: rgba(245, 245, 245, 0.45);
+            --workspace-glass: rgba(245, 245, 245, 0.7); 
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --glass-shadow: 0 8px 32px 0 rgba(62, 79, 26, 0.08);
             
-            /* النصوص */
             --text-main: #1a240b;
             --text-muted: #5a6b3d;
-            --input-bg: rgba(255, 255, 255, 0.7);
+            --input-bg: rgba(255, 255, 255, 0.8);
             --danger: #d9534f;
+            --success: #25D366;
+            --info: #007bff; /* لون زرار الطباعة */
             --transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* --- الوضع الليلي (Dark Mode) --- */
+        /* --- الوضع الليلي (Dark Mode) - أسود صريح --- */
         body.dark-mode {
             --primary-zayti: #8ba84b; 
             --primary-zayti-hover: #a1c25a;
-            --bg-page: #121212;
-            --bg-gradient: linear-gradient(135deg, #1f231b 0%, #0a0a0a 100%);
+            /* خلفية أسود صريح */
+            --bg-page: #000000;
             
-            /* تأثيرات الزجاج (الوضع الليلي) */
             --glass-bg: rgba(20, 25, 15, 0.55);
-            --workspace-glass: rgba(15, 18, 12, 0.85); /* خلفية أعتم شوية لليل */
+            --workspace-glass: rgba(15, 18, 12, 0.85); 
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             
-            /* النصوص */
             --text-main: #f0f4f8;
             --text-muted: #a0aab5;
-            --input-bg: rgba(0, 0, 0, 0.4);
+            --input-bg: rgba(30, 30, 30, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -56,9 +53,9 @@
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             width: 100%; height: 100dvh;
             overflow: hidden; 
-            background: var(--bg-gradient);
+            background-color: var(--bg-page);
             color: var(--text-main); 
-            transition: background var(--transition), color var(--transition);
+            transition: background-color var(--transition), color var(--transition);
         }
 
         /* --- اللوجو الـ 3D في الخلفية --- */
@@ -67,7 +64,7 @@
             top: 50%; left: 50%; 
             transform: translate(-50%, -50%) perspective(600px) rotateX(15deg) rotateY(-10deg) scale(1.4);
             width: 85vw; max-width: 450px; 
-            opacity: 0.06; 
+            opacity: 0.05; 
             filter: drop-shadow(20px 20px 25px rgba(0,0,0,0.5));
             pointer-events: none; z-index: 0;
             transition: var(--transition);
@@ -77,7 +74,6 @@
             filter: drop-shadow(20px 20px 25px rgba(0,0,0,0.8)) invert(0.2);
         }
 
-        /* كلاس الزجاج العام */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
@@ -86,15 +82,13 @@
             box-shadow: var(--glass-shadow);
         }
 
-        /* --- الإدخال والأزرار --- */
         .btn, .input-clean { border-radius: 16px; outline: none; transition: var(--transition); }
         .input-clean { 
             background: var(--input-bg); 
             border: 1px solid var(--glass-border); 
             color: var(--text-main); 
             padding: 14px 18px; font-size: 15px; width: 100%; 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         }
         .input-clean:focus { border-color: var(--primary-zayti); box-shadow: 0 0 0 3px rgba(62, 79, 26, 0.2); }
         .input-clean::placeholder { color: var(--text-muted); opacity: 0.8; }
@@ -106,18 +100,13 @@
         }
         .btn-primary:active { transform: scale(0.96); background: var(--primary-zayti-hover); }
 
-        /* --- شاشة تسجيل الدخول --- */
         #login-screen { position: absolute; inset: 0; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; display: none; }
-        .login-box { 
-            padding: 40px 30px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; z-index: 1; 
-        }
+        .login-box { padding: 40px 30px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; z-index: 1; }
         .login-box img { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
 
-        /* --- الهيكل العام --- */
         #app-container { display: none; position: relative; width: 100%; height: 100%; overflow: hidden; }
         .screen { position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; background: transparent; display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; }
 
-        /* --- الهيدر الزجاجي --- */
         header { 
             background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
@@ -134,15 +123,27 @@
         }
         .btn-icon-top:active { transform: scale(0.9); background: var(--primary-zayti); color: #fff; }
 
-        /* --- شاشة 1: قائمة العملاء --- */
+        /* --- إجمالي السوق --- */
+        .market-total-box {
+            background: var(--primary-zayti);
+            color: white;
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 16px; font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 5;
+        }
+        .market-total-box .amount { font-size: 22px; font-weight: 900; }
+
         #screen-customers { transform: translateX(0); }
         .top-bar-actions { padding: 20px 15px; background: transparent; display: flex; flex-direction: column; gap: 12px; z-index: 2; flex-shrink: 0; }
-        .search-wrapper { position: relative; }
-        .search-wrapper i { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; }
-        .search-wrapper input { padding-right: 45px; border-radius: 20px; }
+        
+        .search-wrapper { position: relative; display: flex; align-items: center; }
+        .search-wrapper i { position: absolute; right: 18px; color: var(--primary-zayti); font-size: 18px; z-index: 5; }
+        .search-wrapper input { padding-right: 45px; border-radius: 20px; z-index: 4; }
         
         .add-customer-form { display: flex; gap: 10px; }
-        .add-customer-form button { width: 65px; background: var(--text-main); color: var(--bg-page); border-radius: 16px; font-size: 20px; border: none; }
+        .add-customer-form button { width: 65px; background: var(--text-main); color: var(--bg-page); border-radius: 16px; font-size: 20px; border: none; display:flex; justify-content:center; align-items:center;}
         .add-customer-form button:active { transform: scale(0.95); }
         
         .list-container { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 5px 15px 40px; z-index: 2; }
@@ -152,18 +153,16 @@
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
         }
         .customer-card:active { transform: scale(0.98); }
-        .cust-info .name { font-size: 17px; font-weight: 900; display: block; margin-bottom: 6px; color: var(--text-main); }
+        .cust-info .name { font-size: 17px; font-weight: 900; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: var(--text-main); }
         .cust-info .date { font-size: 13px; color: var(--text-muted); font-weight: 500; }
         .cust-amount { font-size: 18px; font-weight: 900; direction: ltr; color: var(--primary-zayti); text-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
         /* --- شاشة 2: تفاصيل المديونية --- */
-        /* التعديل هنا: غلوشة قوية وخلفية تعزل الشاشة اللي تحتها */
         #screen-workspace { 
             transform: translateX(-100%); 
             z-index: 5; 
             background: var(--workspace-glass);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
+            backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
         }
         #screen-workspace.active { transform: translateX(0); }
         
@@ -181,19 +180,19 @@
             display: flex; justify-content: space-between; align-items: center; 
         }
         .item-card::before { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 8px; }
-        .item-card.is-debt::before { background: var(--primary-zayti); }
-        .item-card.is-pay::before { background: var(--text-main); }
+        .item-card.is-debt::before { background: var(--danger); }
+        .item-card.is-pay::before { background: var(--success); }
 
-        .item-title { font-weight: 900; font-size: 16px; display: block; color: var(--text-main); margin-bottom: 4px; }
-        .item-title i { margin-left: 5px; }
+        .item-title { font-weight: 900; font-size: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-main); margin-bottom: 4px; }
         .item-meta { font-size: 13px; color: var(--text-muted); font-weight: 500; }
         .item-totals { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-        .item-price { font-size: 17px; font-weight: 900; color: var(--primary-zayti); }
+        .item-price { font-size: 17px; font-weight: 900; }
+        .is-debt .item-price { color: var(--danger); }
+        .is-pay .item-price { color: var(--success); }
         
         .btn-delete { background: rgba(255,0,0,0.1); border: none; color: var(--danger); font-size: 16px; padding: 6px 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
         .btn-delete:active { background: var(--danger); color: white; }
 
-        /* --- شريط الإجمالي الزجاجي --- */
         .fixed-bottom-bar { 
             position: absolute; bottom: 0; left: 0; right: 0; height: 85px; 
             background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -204,18 +203,43 @@
         .total-text { font-size: 18px; font-weight: 800; color: var(--text-muted); }
         .total-number { font-size: 28px; font-weight: 900; color: var(--primary-zayti); text-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* --- الإشعارات و اللودر --- */
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); opacity: 0.6; }
+        .empty-state i { font-size: 40px; margin-bottom: 15px; }
+        .empty-state p { font-size: 16px; font-weight: bold; }
+
         #loader { position: fixed; inset: 0; background: var(--bg-page); z-index: 9999; display: flex; justify-content: center; align-items: center; font-size: 22px; color: var(--primary-zayti); font-weight: 900; }
         #toast { position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: var(--bg-page); padding: 14px 28px; border-radius: 30px; font-weight: bold; font-size: 15px; opacity: 0; transition: var(--transition); z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         #toast.show { bottom: 40px; opacity: 1; }
+
+        /* --- إعدادات الطباعة للـ PDF --- */
+        #printArea { display: none; }
+        @media print {
+            body * { visibility: hidden; } /* إخفاء كل الموقع */
+            html, body { background: white !important; overflow: visible !important; position: static !important; height: auto !important; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { 
+                display: block; 
+                position: absolute; left: 0; top: 0; 
+                width: 100%; padding: 20px; 
+                background: white; color: black; 
+                direction: rtl; font-family: 'Tajawal', sans-serif;
+            }
+            .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            .print-table th, .print-table td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+            .print-table th { background-color: #f2f2f2; font-weight: bold; }
+            .print-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+            .print-total { text-align: left; font-size: 20px; font-weight: bold; margin-top: 20px; }
+        }
     </style>
 </head>
 <body> 
 
-    <img src="17074.png" class="app-watermark" alt="">
+    <img src="17074.png" class="app-watermark" alt="خلفية">
 
     <div id="loader">جاري التحميل...</div>
     <div id="toast">رسالة</div>
+
+    <div id="printArea"></div>
 
     <div id="login-screen">
         <div class="login-box glass-panel">
@@ -224,7 +248,7 @@
             <form id="loginForm">
                 <input type="email" id="email" class="input-clean" style="margin-bottom:15px;" required placeholder="البريد الإلكتروني">
                 <input type="password" id="password" class="input-clean" style="margin-bottom:25px;" required placeholder="كلمة المرور">
-                <button type="submit" class="btn btn-primary">دخول للنظام</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> دخول للنظام</button>
                 <p id="login-error" style="color:var(--danger); margin-top:15px; display:none; font-weight:bold;"></p>
             </form>
         </div>
@@ -236,13 +260,18 @@
             <header>
                 <div class="header-title">
                     <img src="احمد الشيخ (3).png" alt="Logo">
-                    <span>العملاء</span>
+                    <span>قائمة العملاء</span>
                 </div>
                 <div class="header-btns">
                     <button class="btn-icon-top" id="themeToggle" title="تغيير المظهر"><i class="fas fa-moon"></i></button>
-                    <button class="btn-icon-top" id="logoutBtn" title="خروج"><i class="fas fa-sign-out-alt"></i></button>
+                    <button class="btn-icon-top" id="logoutBtn" title="خروج"><i class="fas fa-power-off"></i></button>
                 </div>
             </header>
+
+            <div class="market-total-box">
+                <span><i class="fas fa-wallet"></i> إجمالي فلوس السوق:</span>
+                <span class="amount" id="marketTotalAmount">0 ج.م</span>
+            </div>
 
             <div class="top-bar-actions">
                 <div class="search-wrapper">
@@ -251,7 +280,7 @@
                 </div>
                 <form id="addCustomerForm" class="add-customer-form">
                     <input type="text" id="newCustomerName" class="input-clean" placeholder="إضافة عميل جديد..." required>
-                    <button type="submit" class="btn glass-panel"><i class="fas fa-user-plus"></i></button>
+                    <button type="submit" class="btn glass-panel" title="إضافة عميل"><i class="fas fa-user-plus"></i></button>
                 </form>
             </div>
 
@@ -263,10 +292,11 @@
             <header>
                 <div class="header-title">
                     <button onclick="closeWorkspace()" style="background:none; border:none; color:var(--text-main); font-size:22px; margin-left:12px; cursor:pointer;"><i class="fas fa-arrow-right"></i></button>
-                    <span id="currentCustomerName" style="font-size: 18px;">اسم العميل</span>
+                    <span id="currentCustomerName" style="font-size: 18px;"><i class="fas fa-user-circle"></i> اسم العميل</span>
                 </div>
                 <div class="header-btns">
-                    <button class="btn-icon-top" onclick="shareWhatsApp()" style="color: #25D366;"><i class="fab fa-whatsapp"></i></button>
+                    <button class="btn-icon-top" onclick="printInvoice()" style="color: var(--info);" title="طباعة / حفظ كـ PDF"><i class="fas fa-file-pdf"></i></button>
+                    <button class="btn-icon-top" onclick="shareWhatsApp()" style="color: var(--success);"><i class="fab fa-whatsapp"></i></button>
                     <button class="btn-icon-top" onclick="deleteCustomer()" style="color: var(--danger);"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </header>
@@ -276,11 +306,11 @@
                     <input type="text" id="itemName" class="input-clean" placeholder="الصنف (مثال: كوتشي)" required style="flex:2;">
                     <input type="number" id="itemQty" class="input-clean" placeholder="العدد" min="1" required style="flex:1;">
                     <input type="number" id="itemPrice" class="input-clean" placeholder="السعر" min="0" required style="flex:1;">
-                    <button type="submit" class="btn btn-add-debt" title="إضافة سحب"><i class="fas fa-plus"></i></button>
+                    <button type="submit" class="btn btn-add-debt" title="إضافة سحب"><i class="fas fa-cart-plus"></i></button>
                 </form>
                 <form id="addPaymentForm" class="w-form">
                     <input type="number" id="paymentAmount" class="input-clean" placeholder="مبلغ الدفعة المسددة" min="1" required style="flex:1;">
-                    <button type="submit" class="btn btn-add-pay" title="تسديد نقدية"><i class="fas fa-hand-holding-dollar"></i></button>
+                    <button type="submit" class="btn btn-add-pay" title="تسديد نقدية"><i class="fas fa-hand-holding-usd"></i></button>
                 </form>
             </div>
 
@@ -322,19 +352,22 @@
         let customersData = []; 
 
         const themeToggleBtn = document.getElementById('themeToggle');
+        // تعديل الثيم ليعمل على الأبيض الصريح والأسود الصريح
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const icon = themeToggleBtn.querySelector('i');
             if(document.body.classList.contains('dark-mode')) {
                 icon.className = 'fas fa-sun';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
             } else {
                 icon.className = 'fas fa-moon';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
             }
         });
 
         window.showToast = function(msg) {
             const t = document.getElementById('toast');
-            t.innerText = msg; t.classList.add('show');
+            t.innerHTML = msg; t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2500);
         }
 
@@ -375,25 +408,36 @@
                 customersData = [];
                 const list = document.getElementById('customersList');
                 list.innerHTML = '';
+                let grandMarketTotal = 0; 
 
-                snapshot.forEach((doc) => {
-                    const data = doc.data(); data.id = doc.id;
-                    if(!data.items) data.items = [];
-                    let total = 0;
-                    data.items.forEach(i => total += (i.type === 'payment' ? -i.price : i.qty * i.price));
-                    data.totalDebt = total;
-                    customersData.push(data);
+                if (snapshot.empty) {
+                    list.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-users-slash"></i>
+                            <p>لا يوجد عملاء مسجلين حتى الآن</p>
+                        </div>`;
+                } else {
+                    snapshot.forEach((doc) => {
+                        const data = doc.data(); data.id = doc.id;
+                        if(!data.items) data.items = [];
+                        let total = 0;
+                        data.items.forEach(i => total += (i.type === 'payment' ? -i.price : i.qty * i.price));
+                        data.totalDebt = total;
+                        grandMarketTotal += total; 
+                        customersData.push(data);
 
-                    list.innerHTML += `
-                        <div class="customer-card glass-panel" onclick="openWorkspace('${doc.id}')">
-                            <div class="cust-info">
-                                <span class="name">${data.name}</span>
-                                <span class="date"><i class="fas fa-list-ul"></i> ${data.items.length} حركات مسجلة</span>
+                        list.innerHTML += `
+                            <div class="customer-card glass-panel" onclick="openWorkspace('${doc.id}')">
+                                <div class="cust-info">
+                                    <span class="name"><i class="fas fa-user"></i> ${data.name}</span>
+                                    <span class="date"><i class="fas fa-list-ul"></i> ${data.items.length} حركات مسجلة</span>
+                                </div>
+                                <div class="cust-amount">${total} ج</div>
                             </div>
-                            <div class="cust-amount">${total} ج</div>
-                        </div>
-                    `;
-                });
+                        `;
+                    });
+                }
+                document.getElementById('marketTotalAmount').innerText = grandMarketTotal + " ج.م";
                 if (currentCustomerId) renderWorkspace();
             });
         }
@@ -403,46 +447,54 @@
             const name = document.getElementById('newCustomerName').value.trim();
             if(!name) return;
             await addDoc(collection(db, "customers"), { name, items: [], createdAt: serverTimestamp() });
-            document.getElementById('newCustomerName').value = ''; showToast("تم إضافة العميل بنجاح ✨");
+            document.getElementById('newCustomerName').value = ''; showToast("<i class='fas fa-check-circle'></i> تم إضافة العميل بنجاح");
         });
 
         function renderWorkspace() {
             const customer = customersData.find(c => c.id === currentCustomerId);
             if(!customer) return;
-            document.getElementById('currentCustomerName').innerText = customer.name;
+            document.getElementById('currentCustomerName').innerHTML = `<i class="fas fa-user-circle"></i> ${customer.name}`;
             const list = document.getElementById('debtsList');
             list.innerHTML = '';
             
-            customer.items.forEach((item, index) => {
-                if(item.type === 'payment') {
-                    list.innerHTML += `
-                        <div class="item-card is-pay glass-panel">
-                            <div class="item-details">
-                                <span class="item-title"><i class="fas fa-arrow-down" style="color:#25D366;"></i> دفعة مسددة</span>
-                                <span class="item-meta">${item.date}</span>
+            if (customer.items.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-check"></i>
+                        <p>حساب العميل مصفر ولا يوجد حركات</p>
+                    </div>`;
+            } else {
+                customer.items.forEach((item, index) => {
+                    if(item.type === 'payment') {
+                        list.innerHTML += `
+                            <div class="item-card is-pay glass-panel">
+                                <div class="item-details">
+                                    <span class="item-title"><i class="fas fa-arrow-down" style="color:var(--success);"></i> دفعة مسددة</span>
+                                    <span class="item-meta"><i class="far fa-clock"></i> ${item.date}</span>
+                                </div>
+                                <div class="item-totals">
+                                    <span class="item-price">- ${item.price} ج</span>
+                                    <button class="btn-delete" onclick="deleteItem(${index})"><i class="fas fa-times-circle"></i></button>
+                                </div>
                             </div>
-                            <div class="item-totals">
-                                <span class="item-price" style="color:var(--text-main);">- ${item.price} ج</span>
-                                <button class="btn-delete" onclick="deleteItem(${index})"><i class="fas fa-times-circle"></i></button>
+                        `;
+                    } else {
+                        const total = item.qty * item.price;
+                        list.innerHTML += `
+                            <div class="item-card is-debt glass-panel">
+                                <div class="item-details">
+                                    <span class="item-title"><i class="fas fa-shopping-bag" style="color:var(--text-main);"></i> ${item.name}</span>
+                                    <span class="item-meta"><i class="far fa-clock"></i> ${item.date} • السعر: ${item.price} • العدد: ${item.qty}</span>
+                                </div>
+                                <div class="item-totals">
+                                    <span class="item-price">${total} ج</span>
+                                    <button class="btn-delete" onclick="deleteItem(${index})"><i class="fas fa-trash-alt"></i></button>
+                                </div>
                             </div>
-                        </div>
-                    `;
-                } else {
-                    const total = item.qty * item.price;
-                    list.innerHTML += `
-                        <div class="item-card is-debt glass-panel">
-                            <div class="item-details">
-                                <span class="item-title">${item.name}</span>
-                                <span class="item-meta">${item.date} • السعر: ${item.price} • العدد: ${item.qty}</span>
-                            </div>
-                            <div class="item-totals">
-                                <span class="item-price">${total} ج</span>
-                                <button class="btn-delete" onclick="deleteItem(${index})"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
+                        `;
+                    }
+                });
+            }
             const totalEl = document.getElementById('grandTotalAmount');
             totalEl.innerText = customer.totalDebt + " ج.م";
         }
@@ -482,6 +534,52 @@
             c.items.forEach(i => msg += i.type === 'payment' ? `🟢 سداد: ${i.price}ج (${i.date})\n` : `🔴 سحب: ${i.name} (${i.qty*i.price}ج)\n`);
             msg += `----------------\n*المطلوب سداده: ${c.totalDebt} ج.م*\n\nشكرًا لتعاملك معنا ✨`;
             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        // --- دالة تجهيز وطباعة الفاتورة PDF ---
+        window.printInvoice = function() {
+            const c = customersData.find(c => c.id === currentCustomerId);
+            let html = `
+                <div class="print-header">
+                    <h2>أحمد الشيخ</h2>
+                    <h3 style="color:#555;">كشف حساب عميل مفصل</h3>
+                    <div style="display:flex; justify-content:space-between; margin-top:15px; font-weight:bold;">
+                        <span>العميل: ${c.name}</span>
+                        <span>التاريخ: ${getCurrentDate()}</span>
+                    </div>
+                </div>
+                <table class="print-table">
+                    <tr>
+                        <th>البيان</th>
+                        <th>التاريخ</th>
+                        <th>القيمة</th>
+                    </tr>
+            `;
+            
+            c.items.forEach(i => {
+                let val = i.type === 'payment' ? `<span style="color:green;">- ${i.price} ج</span>` : `${i.qty * i.price} ج`;
+                let name = i.type === 'payment' ? 'دفعة نقدية مسددة' : `${i.name} (عدد ${i.qty})`;
+                html += `
+                    <tr>
+                        <td>${name}</td>
+                        <td>${i.date}</td>
+                        <td>${val}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                </table>
+                <div class="print-total">
+                    الإجمالي المطلوب سداده: ${c.totalDebt} ج.م
+                </div>
+                <div style="text-align:center; margin-top:40px; font-size:14px; color:#777;">
+                    شكرًا لتعاملك معنا - إدارة محلات أحمد الشيخ
+                </div>
+            `;
+            
+            document.getElementById('printArea').innerHTML = html;
+            window.print();
         };
     </script>
 </body>
