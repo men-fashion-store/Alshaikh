@@ -74,10 +74,10 @@
             left: 20px;
             width: 65px;
             height: 65px;
-            border-radius: 50%; /* نظام دائري */
-            object-fit: cover; /* عشان الصورة ماتتمطش */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* ظل شيك */
-            border: 2px solid rgba(255,255,255,0.5); /* إطار خفيف */
+            border-radius: 50%; 
+            object-fit: cover; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+            border: 2px solid rgba(255,255,255,0.5); 
             z-index: 99; 
             transition: bottom 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             pointer-events: none;
@@ -210,7 +210,7 @@
                 border: 2px solid #ddd;
             }
             
-            .corner-logo { display: none !important; } /* إخفاء لوجو الموقع عشان ميحصلش تداخل */
+            .corner-logo { display: none !important; } 
         }
     </style>
 </head>
@@ -282,6 +282,7 @@
                     </div>
                 </div>
                 <div class="header-btns">
+                    <button class="btn-icon-top" onclick="editCustomerInfo()" style="color: var(--primary-zayti);" title="تعديل بيانات العميل"><i class="fas fa-user-edit"></i></button>
                     <button class="btn-icon-top" onclick="printInvoice()" style="color: var(--info);" title="طباعة الكشف"><i class="fas fa-file-pdf"></i></button>
                     <button class="btn-icon-top" onclick="shareWhatsApp()" style="color: var(--success);" title="إرسال واتساب"><i class="fab fa-whatsapp"></i></button>
                     <button class="btn-icon-top" onclick="deleteCustomer()" style="color: var(--danger);"><i class="fas fa-trash-alt"></i></button>
@@ -449,6 +450,29 @@
             e.target.reset(); showToast("<i class='fas fa-check-circle'></i> تم إضافة العميل");
         });
 
+        // --- وظيفة تعديل بيانات العميل ---
+        window.editCustomerInfo = async function() {
+            const c = customersData.find(c => c.id === currentCustomerId);
+            if(!c) return;
+            
+            let newName = prompt("تعديل اسم العميل:", c.name);
+            if(newName === null) return; 
+            
+            if(newName.trim() === "") {
+                showToast("لا يمكن ترك الاسم فارغاً!");
+                return;
+            }
+
+            let newPhone = prompt("تعديل رقم الموبايل (يمكنك تركه فارغاً):", c.phone || "");
+            if(newPhone === null) return; 
+
+            await updateDoc(doc(db, "customers", currentCustomerId), { 
+                name: newName.trim(), 
+                phone: newPhone.trim() 
+            });
+            showToast("تم تعديل بيانات العميل بنجاح ✨");
+        };
+
         const itemTypeSelect = document.getElementById('itemTypeSelect');
         const addExtraRowBtn = document.getElementById('addExtraRowBtn');
         const dynamicItemsContainer = document.getElementById('dynamicItemsContainer');
@@ -538,7 +562,7 @@
                                 </div>
                                 <div class="item-totals">
                                     <span class="item-price">- ${item.price} ج</span>
-                                    <button class="btn-delete" onclick="deleteItem(${index})"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn-delete" onclick="deleteItem(${index})"><i class="fas fa-times-circle"></i></button>
                                 </div>
                             </div>
                         `;
