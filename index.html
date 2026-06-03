@@ -20,7 +20,7 @@
             --glass-border: rgba(0, 0, 0, 0.05);
             --glass-shadow: 0 8px 32px 0 rgba(62, 79, 26, 0.08);
             
-            --text-main: #1a240b;
+            --text-main: #3E4F1A; /* تم ضبط لون النصوص الأساسي للزيتي */
             --text-muted: #5a6b3d;
             --input-bg: rgba(255, 255, 255, 0.8);
             --danger: #d9534f;
@@ -39,7 +39,7 @@
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             
-            --text-main: #f0f4f8;
+            --text-main: #8ba84b; /* تم ضبط لون النصوص الأساسي للزيتي في الوضع الليلي */
             --text-muted: #a0aab5;
             --input-bg: rgba(30, 30, 30, 0.6);
         }
@@ -410,6 +410,7 @@
                 if (snapshot.empty) {
                     list.innerHTML = `<div class="empty-state"><i class="fas fa-users-slash"></i><p>لا يوجد عملاء مسجلين</p></div>`;
                 } else {
+                    // 1. جمع وتجهيز البيانات
                     snapshot.forEach((doc) => {
                         const data = doc.data(); data.id = doc.id;
                         if(!data.items) data.items = [];
@@ -420,16 +421,22 @@
                             else total += (i.qty * i.price);
                         });
                         data.totalDebt = total; grandMarketTotal += total; customersData.push(data);
+                    });
 
+                    // 2. ترتيب المصفوفة أبجدياً حسب اسم العميل
+                    customersData.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+
+                    // 3. رسم كروت العملاء بعد الترتيب
+                    customersData.forEach((data) => {
                         let phoneHtml = data.phone ? `<span class="phone"><i class="fas fa-phone-alt"></i> ${data.phone}</span>` : '';
                         list.innerHTML += `
-                            <div class="customer-card glass-panel" onclick="openWorkspace('${doc.id}')">
+                            <div class="customer-card glass-panel" onclick="openWorkspace('${data.id}')">
                                 <div class="cust-info">
                                     <span class="name"><i class="fas fa-user"></i> ${data.name}</span>
                                     ${phoneHtml}
                                     <span class="date"><i class="fas fa-list-ul"></i> ${data.items.length} عمليات مسجلة</span>
                                 </div>
-                                <div class="cust-amount">${total} ج</div>
+                                <div class="cust-amount">${data.totalDebt} ج</div>
                             </div>
                         `;
                     });
