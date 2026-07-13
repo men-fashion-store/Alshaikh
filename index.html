@@ -39,7 +39,7 @@
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             
-            --text-main: #8ba84b; /* تم ضبط لون النصوص الأساسي للزيتي في الوضع الليلي */
+            --text-main: hsl(75, 18%, 96%); /* تم ضبط لون النصوص الأساسي للزيتي في الوضع الليلي */
             --text-muted: #a0aab5;
             --input-bg: rgba(30, 30, 30, 0.6);
         }
@@ -57,15 +57,15 @@
 
         /* --- العلامة المائية في الخلفية --- */
         .app-watermark {
-            position: fixed; top: 50%; left: 50%; 
+            position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) perspective(600px) rotateX(15deg) rotateY(-10deg) scale(1.4);
-            width: 85vw; max-width: 450px; 
-            opacity: 0.04; 
+            width: 85vw; max-width: 450px;
+            opacity: 0.08;
             filter: drop-shadow(20px 20px 25px rgba(0,0,0,0.5));
             pointer-events: none; z-index: 0;
             transition: var(--transition);
         }
-        body.dark-mode .app-watermark { opacity: 0.06; filter: drop-shadow(20px 20px 25px rgba(0,0,0,0.8)) invert(0.2); }
+        body.dark-mode .app-watermark { opacity: 0.12; filter: drop-shadow(20px 20px 25px rgba(0,0,0,0.8)) invert(0.2); }
 
         /* --- اللوجو الدائري أسفل اليسار (للموقع) --- */
         .corner-logo {
@@ -211,23 +211,80 @@
                 border: 2px solid #ddd;
             }
             
-            .corner-logo { display: none !important; } 
+            .corner-logo { display: none !important; }
+        }
+
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-page);
+            z-index: 1000;
+        }
+
+        .login-box {
+            padding: 40px 30px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .login-box img {
+            width: 130px;
+            height: 130px;
+            border-radius: 25px;
+            object-fit: cover;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            background: #fff;
+            border: 3px solid rgba(255,255,255,0.8);
+        }
+
+        #login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #login-form input {
+            text-align: center;
+            font-size: 28px;
+            letter-spacing: 8px;
         }
     </style>
 </head>
-<body> 
+<body>
 
     <img src="احمد الشيخ (3).png" class="app-watermark" alt="خلفية">
-    
+
     <img src="احمد الشيخ (3).png" class="corner-logo" alt="أحمد الشيخ">
 
     <div id="loader">جاري التحميل...</div>
     <div id="toast">رسالة</div>
     <div id="printArea"></div>
 
-    
+    <div id="login-screen">
+        <div class="login-box">
+            <img src="احمد الشيخ (3).png" alt="أحمد الشيخ">
+            <h2 style="margin-bottom: 25px; color: var(--text-main); font-weight: 900;">أحمد الشيخ</h2>
+            <form id="login-form">
+                <input type="password" id="password" class="input-clean" required placeholder="كلمة المرور" inputmode="numeric" autocomplete="off" maxlength="12">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> دخول</button>
+            </form>
+            <p id="login-error" style="color: var(--danger); margin-top: 15px; display: none; font-weight: 900; background: rgba(217,83,79,0.1); padding: 10px; border-radius: 10px;"></p>
+        </div>
+    </div>
 
-    <div id="app-container">
+    <div id="app-container" style="display: none;">
         
         <div id="screen-customers" class="screen">
             <header>
@@ -338,9 +395,36 @@
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
         const workspaceScreen = document.getElementById('screen-workspace');
-        
+
         let currentCustomerId = null;
-        let customersData = []; 
+        let customersData = [];
+
+        // تسجيل الدخول بكلمة مرور ثابتة
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+
+            if (password === '123123') {
+                errorEl.style.display = 'none';
+                loginScreen.style.display = 'none';
+                appContainer.style.display = 'block';
+                loadCustomers();
+            } else {
+                errorEl.textContent = 'كلمة المرور غير صحيحة';
+                errorEl.style.display = 'block';
+            }
+        });
+
+        // زر الخروج
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            loginScreen.style.display = 'flex';
+            appContainer.style.display = 'none';
+            document.getElementById('password').value = '';
+        });
+
+        // إخفاء اللودر مباشرة
+        loader.style.display = 'none'; 
 
         const themeToggleBtn = document.getElementById('themeToggle');
         themeToggleBtn.addEventListener('click', () => {
