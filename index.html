@@ -20,7 +20,7 @@
             --glass-border: rgba(0, 0, 0, 0.05);
             --glass-shadow: 0 8px 32px 0 rgba(62, 79, 26, 0.08);
             
-            --text-main: #3E4F1A; /* تم ضبط لون النصوص الأساسي للزيتي */
+            --text-main: #3E4F1A; 
             --text-muted: #5a6b3d;
             --input-bg: rgba(255, 255, 255, 0.8);
             --danger: #d9534f;
@@ -39,7 +39,7 @@
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             
-            --text-main: hsl(75, 18%, 96%); /* تم ضبط لون النصوص الأساسي للزيتي في الوضع الليلي */
+            --text-main: hsl(75, 18%, 96%); 
             --text-muted: #a0aab5;
             --input-bg: rgba(30, 30, 30, 0.6);
         }
@@ -100,10 +100,6 @@
         .btn-primary { background: var(--primary-zayti); color: #fff; padding: 14px; font-size: 16px; font-weight: bold; width: 100%; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(62, 79, 26, 0.4); }
         .btn-primary:active { transform: scale(0.96); background: var(--primary-zayti-hover); }
 
-        #login-screen { position: absolute; inset: 0; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; display: none; }
-        .login-box { padding: 40px 30px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; z-index: 1; }
-        .login-box img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); background: #fff;}
-
         #app-container { display: none; position: relative; width: 100%; height: 100%; overflow: hidden; }
         .screen { position: absolute; inset: 0; display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; }
 
@@ -117,7 +113,6 @@
 
         #screen-customers { transform: translateX(0); }
         
-        /* --- الغلاف الجديد الخاص بالسكرول --- */
         .scroll-wrapper { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; z-index: 2; }
         
         .top-bar-actions { padding: 20px 15px 10px; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
@@ -195,10 +190,8 @@
             .print-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; position: relative; z-index: 2; }
             .print-total { text-align: left; font-size: 22px; font-weight: bold; margin-top: 20px; position: relative; z-index: 2; border: 2px solid #333; display: inline-block; padding: 10px 20px; background: #f9f9f9; float: left; }
             
-            /* العلامة المائية في الـ PDF */
             .print-watermark { position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 450px; opacity: 0.06; z-index: 0; pointer-events: none; }
             
-            /* اللوجو الدائري الصغير أسفل اليسار في الـ PDF */
             .print-corner-logo {
                 position: fixed;
                 bottom: 20px;
@@ -255,7 +248,8 @@
             gap: 15px;
         }
 
-        #login-form input {
+        /* تم تطبيق ستايل الباسوورد فقط هنا لكي لا يتأثر الإيميل */
+        #login-form input[type="password"] {
             text-align: center;
             font-size: 28px;
             letter-spacing: 8px;
@@ -277,7 +271,9 @@
             <img src="احمد الشيخ (3).png" alt="أحمد الشيخ">
             <h2 style="margin-bottom: 25px; color: var(--text-main); font-weight: 900;">أحمد الشيخ</h2>
             <form id="login-form">
-                <input type="password" id="password" class="input-clean" required placeholder="كلمة المرور" inputmode="numeric" autocomplete="off" maxlength="12">
+                <!-- تم إضافة حقل الإيميل وتعيينه للقيم المطلوبة -->
+                <input type="email" id="email" class="input-clean" required placeholder="البريد الإلكتروني" value="abdelgwad_x20@gmail.com" style="text-align: center; font-size: 16px; letter-spacing: 1px; direction: ltr;">
+                <input type="password" id="password" class="input-clean" required placeholder="كلمة المرور" autocomplete="off" value="123123">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> دخول</button>
             </form>
             <p id="login-error" style="color: var(--danger); margin-top: 15px; display: none; font-weight: 900; background: rgba(217,83,79,0.1); padding: 10px; border-radius: 10px;"></p>
@@ -399,28 +395,35 @@
         let currentCustomerId = null;
         let customersData = [];
 
-        // تسجيل الدخول بكلمة مرور ثابتة
+        // تسجيل الدخول الصحيح عبر Firebase Auth
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorEl = document.getElementById('login-error');
 
-            if (password === '123123') {
-                errorEl.style.display = 'none';
-                loginScreen.style.display = 'none';
-                appContainer.style.display = 'block';
-                loadCustomers();
-            } else {
-                errorEl.textContent = 'كلمة المرور غير صحيحة';
-                errorEl.style.display = 'block';
-            }
+            // إظهار اللودر أثناء محاولة الدخول
+            loader.style.display = 'flex';
+            loader.innerText = 'جاري تسجيل الدخول...';
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    errorEl.style.display = 'none';
+                    // onAuthStateChanged سيقوم بالباقي
+                })
+                .catch((error) => {
+                    loader.style.display = 'none';
+                    errorEl.textContent = 'بيانات الدخول غير صحيحة!';
+                    errorEl.style.display = 'block';
+                });
         });
 
         // زر الخروج
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            loginScreen.style.display = 'flex';
-            appContainer.style.display = 'none';
-            document.getElementById('password').value = '';
+            signOut(auth).then(() => {
+                loginScreen.style.display = 'flex';
+                appContainer.style.display = 'none';
+            });
         });
 
         // إخفاء اللودر مباشرة
@@ -458,16 +461,16 @@
 
         onAuthStateChanged(auth, (user) => {
             loader.style.display = 'none';
-            if (user) { loginScreen.style.display = 'none'; appContainer.style.display = 'block'; loadCustomers(); }
-            else { loginScreen.style.display = 'flex'; appContainer.style.display = 'none'; }
+            if (user) { 
+                loginScreen.style.display = 'none'; 
+                appContainer.style.display = 'block'; 
+                loadCustomers(); 
+            }
+            else { 
+                loginScreen.style.display = 'flex'; 
+                appContainer.style.display = 'none'; 
+            }
         });
-
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
-                .catch(() => { document.getElementById('login-error').style.display = 'block'; document.getElementById('login-error').innerText = "بيانات الدخول غير صحيحة!"; });
-        });
-        document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
         window.filterCustomers = function() {
             const v = document.getElementById('searchInput').value.toLowerCase();
@@ -483,7 +486,6 @@
                 if (snapshot.empty) {
                     list.innerHTML = `<div class="empty-state"><i class="fas fa-users-slash"></i><p>لا يوجد عملاء مسجلين</p></div>`;
                 } else {
-                    // 1. جمع وتجهيز البيانات
                     snapshot.forEach((doc) => {
                         const data = doc.data(); data.id = doc.id;
                         if(!data.items) data.items = [];
@@ -496,10 +498,8 @@
                         data.totalDebt = total; grandMarketTotal += total; customersData.push(data);
                     });
 
-                    // 2. ترتيب المصفوفة أبجدياً حسب اسم العميل
                     customersData.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
 
-                    // 3. رسم كروت العملاء بعد الترتيب
                     customersData.forEach((data) => {
                         let phoneHtml = data.phone ? `<span class="phone"><i class="fas fa-phone-alt"></i> ${data.phone}</span>` : '';
                         list.innerHTML += `
@@ -794,3 +794,5 @@
     </script>
 </body>
 </html>
+
+        
